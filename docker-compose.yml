@@ -1,0 +1,39 @@
+version: "3.7"
+services:
+  app:
+    depends_on:
+      - "db"
+    container_name: flask-app
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    image: flask-app:lastest
+    environment:
+      FLASK_ENV: development
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_HOST: db
+      DB_NAME: db_api_python
+      JWT_SECRET_KEY: S3CR3T-JS0N-JWT
+      DB_PORT: 3306
+    ports:
+      - "8000:5000"
+    restart: always
+    networks:
+      - internal
+  
+  db:
+    container_name: db_dev
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: mydb
+    ports:
+      - "3311:3306"
+    networks:
+      - internal
+
+networks:
+  internal:
+    driver: bridge
